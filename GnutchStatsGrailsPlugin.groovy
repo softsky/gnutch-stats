@@ -15,16 +15,15 @@ class GnutchStatsGrailsPlugin {
 
     def license = "APACHE"
     def developers = [
-      [name: "Arsen A. Gutsal", email: "gutsal.arsen@gmail.com"]
+      [name: "Arsen A. Gutsal", email: "gutsal.arsen@gmail.com"],
+      // TODO: fix your email
+      [name: "Nerses Zackoyan", email: ""]
     ]
     def issueManagement = [ system: "GitHub", url: "https://github.com/softsky/gnutch-stats/issues" ]
     def scm = [ url: "https://github.com/softsky/gnutch-stats" ]
     def description = '''\
 Statistics for gnutch grails plugin
 '''
-
-    // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
