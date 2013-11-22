@@ -1,4 +1,10 @@
 // configuration for plugin testing - will not be included in the plugin zip
+grails.config.locations = [
+  "classpath:${appName}-config.properties",
+  "classpath:${appName}-config.groovy",
+  GnutchConfig,
+  "file:${userHome}/.grails/${appName}-config.properties",
+  "file:${userHome}/.grails/${appName}-config.groovy" ]
 
 log4j = {
     // Example of changing the log pattern for the default console
