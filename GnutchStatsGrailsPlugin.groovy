@@ -15,20 +15,13 @@ class GnutchStatsGrailsPlugin {
 
     def license = "APACHE"
     def developers = [
-      [name: "Arsen A. Gutsal", email: "gutsal.arsen@gmail.com"],
-      // TODO: fix your email
-      [name: "Nerses Zackoyan", email: ""]
+      [name: "Arsen A. Gutsal", email: "gutsal.arsen@gmail.com"]
     ]
     def issueManagement = [ system: "GitHub", url: "https://github.com/softsky/gnutch-stats/issues" ]
     def scm = [ url: "https://github.com/softsky/gnutch-stats" ]
     def description = '''\
 Statistics for gnutch grails plugin
 '''
-
-    def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before
-    }
-
     def doWithSpring = {
         // TODO Implement runtime spring config (optional)
     }
@@ -38,7 +31,10 @@ Statistics for gnutch grails plugin
     }
 
     def doWithApplicationContext = { applicationContext ->
-        // TODO Implement post initialization spring config (optional)
+      def camelContext = applicationContext.getBean('camelContext')
+      println "++++ Route definitions:"
+      println camelContext.routeDefinitions
+      println application
     }
 
     def onChange = { event ->
