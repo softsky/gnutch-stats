@@ -40,7 +40,15 @@ Statistics for gnutch grails plugin
     }
 
     def doWithApplicationContext = { applicationContext ->
+<<<<<<< HEAD
       def config = application.config.gnutch.stats
+=======
+      def camelContext = applicationContext.getBean('camelContext')
+      println "++++ Route definitions:"
+      println camelContext.routeDefinitions
+      println application
+    }
+>>>>>>> 863c90446149ae0d86a273e3824d3c52a29a6b75
 
       if(Environment.current == Environment.TEST){
         def xmlBeans = new DefaultListableBeanFactory()
