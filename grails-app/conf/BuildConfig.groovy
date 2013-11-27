@@ -38,29 +38,12 @@ grails.project.dependency.resolution = {
     compile ("org.apache.camel:camel-cache:${camelVersion}") { excludes 'xercesImpl', 'xml-apis', 'slf4j-api', 'ehcache'  }
     compile ("org.apache.camel:camel-tagsoup:${camelVersion}")
 
-    compile ("org.quartz-scheduler:quartz:2.1.6") { excludes 'slf4j-api' }
-
-    compile ("org.apache.tika:tika-core:1.3")
-    compile ("org.apache.tika:tika-parsers:1.3") { excludes "tika-core" }
-
-    runtime("org.apache.activemq:activemq-broker:${activeMQVersion}")  {
-      excludes 'commons-logging',  'spring-context', 'slf4j-api'
-    }
-
-    runtime("org.apache.activemq:activemq-kahadb-store:${activeMQVersion}")  {
-      excludes 'spring-context', 'spring-aop', 'spring-core'
-    }
-
-    runtime("org.apache.activemq:activemq-camel:${activeMQVersion}")  {
-      excludes 'commons-logging', 'slf4j-api', 'camel-core', 'camel-jms', 'camel-spring', 'camel-groovy'
-    }
+    test ("org.apache.camel:camel-test:${camelVersion}") { excludes 'junit' }
 
   }
 
   plugins {
-    build(":tomcat:$grailsVersion",
-          ":gnutch:0.2.2.10",
-          ":release:2.2.1",
+    build(":release:2.2.1",
           ":rest-client-builder:1.0.3") {
       export = false
     }
