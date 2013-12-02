@@ -31,6 +31,7 @@
 /*.zip.sha1
 /.classpath
 /.emacs.desktop
+/.emacs.desktop.lock
 /.launch
 /.project
 /.settings
