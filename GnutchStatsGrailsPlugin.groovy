@@ -8,7 +8,7 @@ import gnutch.stats.StatsCollectorService
 
 class GnutchStatsGrailsPlugin {
     // the plugin version
-    def version = "0.1.3"
+    def version = "0.1.4"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2 > *"
     // resources that are excluded from plugin packaging
@@ -67,9 +67,8 @@ Statistics for gnutch grails plugin
               setHeader('statsFrom', constant("${input.uri}")).
               beanRef('statsCollectorService', 'collect')
             }]
-            def rb = clos as RouteBuilder
-            clos.configure.delegate = rb
-            routeDefinition.adviceWith(camelContext, rb)
+            clos.configure.delegate = clos as RouteBuilder
+            routeDefinition.adviceWith(camelContext, clos.configure.delegate)
           }
         }
       }
