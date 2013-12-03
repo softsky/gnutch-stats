@@ -4,7 +4,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.CamelContext
 
-import gnutch.stats.StatsCollectorService
+import gnutch.stats.StatsCollector
 
 class GnutchStatsGrailsPlugin {
     // the plugin version
@@ -32,7 +32,7 @@ class GnutchStatsGrailsPlugin {
 Statistics for gnutch grails plugin
 '''
     def doWithSpring = {
-      statsCollector(StatsCollectorService)
+      statsCollector(StatsCollector)
     }
 
     def doWithDynamicMethods = { ctx ->
