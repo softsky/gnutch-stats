@@ -36,6 +36,8 @@ grails.project.dependency.resolution = {
     compile ("org.apache.camel:camel-jms:${camelVersion}")  { excludes 'spring-tx', 'spring-jms','spring-context', 'spring-beans', 'spring-aop', 'spring-core' }
     compile ("org.apache.camel:camel-cache:${camelVersion}") { excludes 'xercesImpl', 'xml-apis', 'slf4j-api', 'ehcache'  }
     compile ("org.apache.camel:camel-tagsoup:${camelVersion}")
+ 
+    compile ("org.quartz-scheduler:quartz:2.1.6") { excludes 'slf4j-api' }
 
     test ("org.apache.camel:camel-test:${camelVersion}") { excludes 'junit' }
 

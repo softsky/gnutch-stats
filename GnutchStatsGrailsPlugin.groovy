@@ -4,6 +4,8 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.CamelContext
 
+import org.quartz.Scheduler
+
 import gnutch.stats.StatsCollector
 
 class GnutchStatsGrailsPlugin {
@@ -32,7 +34,18 @@ class GnutchStatsGrailsPlugin {
 Statistics for gnutch grails plugin
 '''
     def doWithSpring = {
-      statsCollector(StatsCollector)
+      stdSchedulerFactory(StdSchedulerFactory)
+
+      quartzScheduler(Scheduler){ bean ->
+	bean.factoryBean = "stdSchedulerFactory"
+	bean.factoryMethod = "getDefaultScheduler"
+       }
+ 
+      statsCollector(StatsCollector){ bean ->
+	quartzScheduler = ref("quartzScheduler")
+	bean.initMethod = "init"	
+      }
+      
     }
 
     def doWithDynamicMethods = { ctx ->
