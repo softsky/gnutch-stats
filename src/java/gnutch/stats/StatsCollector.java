@@ -30,10 +30,13 @@ public class StatsCollector {
     protected Scheduler quartzScheduler;
     protected Integer statisticTimeoutMsec = 15000; // 15 seconds for statistic gathering
 
+    // TODO: rename MyJob into StatsCollectorJob
     protected static class MyJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-	    // Say Hello to the World and display the date/time
-	    _log.info("Hello World! - " + new Date());
+            // TODO: finish implementation:
+            // a) synchronize statistic and arrayStatistic
+            // b) store values from statistic to arrayStatistic with appropriate map keys
+            // c) if statistic has zero value for appropriate key, store zero into arrayStatistic
 	}
     }
 
@@ -43,17 +46,26 @@ public class StatsCollector {
 
 
 	JobDetail job = quartzScheduler.newJob(StatsCollector.MyJob.class)
+            // TODO: rename job and group
+            // group should be named: `statsCollectorGroup`
+            // trigger should be named `collectJob`            
 	    .withIdentity("job1", "group1")
 	    .build();
-	// Define a Trigger that will fire "now"
-	//Trigger trigger = new SimpleTrigger("trigger1", "group1", new Date());
-	// Or this one will repeat 10 times after 100 ms.
+        // TODO rename trigger and group
+        // group should be named: `statsCollectorGroup`
+        // trigger should be named `collectTrigger`
 	Trigger trigger = new SimpleTrigger("trigger1", "group1", 0, statisticTimeoutMsec);
 
 	// Schedule the job with the trigger
 	quartzScheduler.scheduleJob(job, trigger);	
     }
 
+    /**
+     * Called from Camel Routes every time message leaves some producer
+     * just increase `statistic` counter for that particular producer
+     *
+     * @param ex - Camel exchange
+     */
     public void collect(Exchange ex) {
         String from = ex.getIn().getHeader("statsFrom").toString();
  
@@ -63,22 +75,23 @@ public class StatsCollector {
             
             statistic.get(from).incrementAndGet();
         }
-
-        // TODO; complete implementation
-        // so, basically what I need:
-        // a) arrayStatistic should be filled with values. 
-        // Every new value is added to arrayStatistic if statisticTimeoutMsec timeout elapsed since pervious value been added to arrayStatistic
-        // basically what this gives to us: #collect() method is called many times from different threads, it just increase values of statistic map
-        // for particular statsFrom header. Every 15 seconds (statisticTimeoutMsec value)
-        // we should save the value of statistic[index] into arrayStatistic[index] and reset statistic[index] to zero.
-        // if we do so, in arrayStatistic[index] we will have amounts of values for particular `index` gathered for 15 seconds (statisticTimeoutMsec value)
     }
 
 
+    /**
+     * Getter for `statistic` field
+     *
+     * @return value of `statistic` field
+     */
     public Map<String, AtomicLong> getStatistic(){
         return statistic;
     }
 
+    /**
+     * Getter for `arrayStatistic` field
+     *
+     * @return value of `arrayStatistic` field
+     */
     public Map<String, AtomicLongArray> getArrayStatistic(){
         return arrayStatistic;
     }

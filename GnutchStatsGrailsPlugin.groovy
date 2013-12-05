@@ -4,6 +4,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.CamelContext
 
+import org.quartz.impl.StdSchedulerFactory
 import org.quartz.Scheduler
 
 import gnutch.stats.StatsCollector
