@@ -39,11 +39,12 @@ Statistics for gnutch grails plugin
 
       quartzScheduler(Scheduler){ bean ->
 	bean.factoryBean = "stdSchedulerFactory"
-	bean.factoryMethod = "getDefaultScheduler"
+	bean.factoryMethod = "getScheduler"
        }
  
       statsCollector(StatsCollector){ bean ->
-	quartzScheduler = ref("quartzScheduler")
+	scheduler = ref("quartzScheduler")
+        statisticTimeoutMsec = 30000L
 	bean.initMethod = "init"	
       }
       

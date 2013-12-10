@@ -38,7 +38,6 @@ public class StatsCollector {
     protected Scheduler quartzScheduler;
     protected Integer statisticTimeoutMsec = 15000; // 15 seconds for statistic gathering
 
-
     public void init() throws SchedulerException {
 	JobDetail job = JobBuilder.newJob(StatsCollectorJob.class)
 	    .withIdentity("collectJob", "statsCollectorGroup")
@@ -76,7 +75,6 @@ public class StatsCollector {
         }
     }
 
-
     /**
      * Getter for `statistic` field
      *
@@ -94,6 +92,39 @@ public class StatsCollector {
     public Map<String, List<Long>> getArrayStatistic(){
         return arrayStatistic;
     }
+
+    /**
+     * Setter for quartzScheduler field
+     * @param scheduler Scheduler to be set
+     */
+    public void setScheduler(Scheduler scheduler){
+        quartzScheduler = scheduler;
+    }
+
+    /**
+     * Getter for quartzScheduler field
+     * @return value of quartzScheduler
+     */
+    public Scheduler getScheduler(){
+        return quartzScheduler;
+    }
+
+    /**
+     * Setter for statisticTimeoutMsec field
+     * @param timeout value to be set
+     */
+    public void setStatisticTimeoutMsec(Integer timeout){
+        statisticTimeoutMsec = timeout;
+    }
+
+    /**
+     * Getter for statisticTimeoutMsec field
+     * @return value of statisticTimeoutMsec
+     */
+    public Integer getStatisticTimeoutMsec(){
+        return statisticTimeoutMsec;
+    }
+
 }
 
 
