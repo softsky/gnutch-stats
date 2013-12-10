@@ -1,63 +1,62 @@
 package gnutch.stats;
 
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.HashMap;
 import org.apache.camel.Exchange;
 
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicLongArray;
 
+import org.quartz.Job;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.SimpleScheduleBuilder;
-import org.quartz.JobDetail;
-import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StatsCollector {
+    private static Logger LOG = LoggerFactory.getLogger(StatsCollector.class);
+
     private Map<String, AtomicLong> statistic = new HashMap<String, AtomicLong>();
-    private Map<String, AtomicLongArray> arrayStatistic = new HashMap<String, AtomicLongArray>();
+    private Map<String, List<Long>> arrayStatistic = new HashMap<String, List<Long>>();
 
     protected Scheduler quartzScheduler;
     protected Integer statisticTimeoutMsec = 15000; // 15 seconds for statistic gathering
 
-    // TODO: rename MyJob into StatsCollectorJob
-    protected static class MyJob implements Job {
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-            // TODO: finish implementation:
-            // a) synchronize statistic and arrayStatistic
-            // b) store values from statistic to arrayStatistic with appropriate map keys
-            // c) if statistic has zero value for appropriate key, store zero into arrayStatistic
-	}
-    }
 
-    public void init(){
-	if(quartzScheduler.isStarted() == false)
-	    quartzScheduler.start();
-
-
-	JobDetail job = quartzScheduler.newJob(StatsCollector.MyJob.class)
-            // TODO: rename job and group
-            // group should be named: `statsCollectorGroup`
-            // trigger should be named `collectJob`            
-	    .withIdentity("job1", "group1")
+    public void init() throws SchedulerException {
+	JobDetail job = JobBuilder.newJob(StatsCollectorJob.class)
+	    .withIdentity("collectJob", "statsCollectorGroup")
 	    .build();
-        // TODO rename trigger and group
-        // group should be named: `statsCollectorGroup`
-        // trigger should be named `collectTrigger`
-	Trigger trigger = new SimpleTrigger("trigger1", "group1", 0, statisticTimeoutMsec);
+
+        job.getJobDataMap().put("statistic", statistic);
+        job.getJobDataMap().put("arrayStatistic", arrayStatistic);
+
+	Trigger trigger = TriggerBuilder.newTrigger().
+            withIdentity("collectTrigger", "statsCollectorGroup").
+            startNow().
+            withSchedule(SimpleScheduleBuilder.simpleSchedule().
+                         withIntervalInMilliseconds(statisticTimeoutMsec).
+                         repeatForever()).
+            build();
 
 	// Schedule the job with the trigger
-	quartzScheduler.scheduleJob(job, trigger);	
+	quartzScheduler.scheduleJob(job, trigger);
     }
 
     /**
@@ -71,7 +70,7 @@ public class StatsCollector {
  
         synchronized(statistic){
             if(statistic.containsKey(from) == false)
-                statistic.put(from, new AtomicLong());
+                statistic.put(from, new AtomicLong(0L));
             
             statistic.get(from).incrementAndGet();
         }
@@ -92,7 +91,7 @@ public class StatsCollector {
      *
      * @return value of `arrayStatistic` field
      */
-    public Map<String, AtomicLongArray> getArrayStatistic(){
+    public Map<String, List<Long>> getArrayStatistic(){
         return arrayStatistic;
     }
 }

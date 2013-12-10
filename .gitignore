@@ -32,10 +32,12 @@
 /.classpath
 /.emacs.desktop
 /.emacs.desktop.lock
+/.idea
 /.launch
 /.project
 /.settings
 /eclipse
+/gnutch-stats.iml
 /ivy*
 /logs
 /plugin.xml
