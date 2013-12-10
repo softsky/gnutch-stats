@@ -21,6 +21,7 @@ import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
+import org.quartz.TriggerKey;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.spi.JobFactory;
@@ -56,6 +57,10 @@ public class StatsCollector {
 
 	// Schedule the job with the trigger
 	quartzScheduler.scheduleJob(job, trigger);
+    }
+
+    public void cleanUp() throws SchedulerException{
+        quartzScheduler.unscheduleJob(new TriggerKey("collectTrigger", "statsCollectorGroup"));
     }
 
     /**

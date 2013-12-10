@@ -3,19 +3,13 @@ package gnutch.stats
 import static org.junit.Assert.*
 import org.junit.*
 
-import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.CamelContext
 import org.apache.camel.test.junit4.CamelTestSupport
-
-import gnutch.stats.StatsCollectorService
-import org.springframework.beans.factory.annotation.Autowired
 
 class InitializationTests extends CamelTestSupport {
 
   def camelContext
-  def grailsApplication
-  @Autowired
-  StatsCollectorService statsCollectorService
+  def statsCollector
 
   @Override
   protected CamelContext createCamelContext() throws Exception {
@@ -23,11 +17,12 @@ class InitializationTests extends CamelTestSupport {
   }
 
   @Test
-  void testSomething() {
+  void testStatistic() {
     final unchanged = [1,2,3]
 
-    assert statsCollectorService.statistic.size() == 0
+    assert statsCollector.statistic.size() == 0
 
+    println "Started:" + camelContext.isStarted()
     
     def mockEndpoint = getMockEndpoint('mock:direct:a')
 
@@ -47,6 +42,6 @@ class InitializationTests extends CamelTestSupport {
 
     assertMockEndpointsSatisfied()
 
-    assert statsCollectorService.statistic['direct:a'].get() == 3
+    assert statsCollector.statistic['direct:a'].get() == 3
   }
 }

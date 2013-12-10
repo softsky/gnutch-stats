@@ -40,12 +40,14 @@ Statistics for gnutch grails plugin
       quartzScheduler(Scheduler){ bean ->
 	bean.factoryBean = "stdSchedulerFactory"
 	bean.factoryMethod = "getScheduler"
+        bean.initMethod = "start"
        }
  
       statsCollector(StatsCollector){ bean ->
 	scheduler = ref("quartzScheduler")
         statisticTimeoutMsec = 30000L
 	bean.initMethod = "init"	
+        bean.destroyMethod = "cleanUp"
       }
       
     }
@@ -68,7 +70,6 @@ Statistics for gnutch grails plugin
 
       if(applicationContext.containsBean(config?.camelContextId)){
         final CamelContext camelContext = applicationContext.getBean(config.camelContextId);
-
       
         def routeDefinitions = []
         camelContext.routeDefinitions.each { routeDefinition ->
@@ -80,7 +81,7 @@ Statistics for gnutch grails plugin
             def clos = [configure: {
               interceptFrom(input.uri).
               setHeader('statsFrom', constant("${input.uri}")).
-              beanRef('statsCollectorService', 'collect')
+              beanRef('statsCollector', 'collect')
             }]
             clos.configure.delegate = clos as RouteBuilder
             routeDefinition.adviceWith(camelContext, clos.configure.delegate)

@@ -2,7 +2,7 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 
-def camelVersion = '2.12.1'
+def camelVersion = '2.11.0' // integration tests does not work on 2.12.1
 
 grails.project.dependency.resolution = {
   // inherit Grails' default dependencies
@@ -17,11 +17,11 @@ grails.project.dependency.resolution = {
     mavenCentral()
     // uncomment the below to enable remote dependency resolution
     // from public Maven repositories
-    //mavenLocal()
-    //mavenRepo "http://snapshots.repository.codehaus.org"
-    //mavenRepo "http://repository.codehaus.org"
-    //mavenRepo "http://download.java.net/maven/2/"
-    //mavenRepo "http://repository.jboss.com/maven2/"
+    mavenLocal()
+    // mavenRepo "http://snapshots.repository.codehaus.org"
+    // mavenRepo "http://repository.codehaus.org"
+    // mavenRepo "http://download.java.net/maven/2/"
+    // mavenRepo "http://repository.jboss.com/maven2/"
   }
   dependencies {
     // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -29,14 +29,8 @@ grails.project.dependency.resolution = {
     // runtime 'mysql:mysql-connector-java:5.1.21'
 
     compile ("org.apache.camel:camel-core:${camelVersion}") { excludes 'slf4j-api' }   
-    compile ("org.apache.camel:camel-http:${camelVersion}") { excludes 'commons-codec' }
-    compile ("org.apache.camel:camel-mail:${camelVersion}")
-    compile ("org.apache.camel:camel-groovy:${camelVersion}") { excludes 'groovy-all' }
-    compile ("org.apache.camel:camel-spring:${camelVersion}") { excludes 'log4j', 'spring-tx', 'spring-jms','spring-context', 'spring-beans', 'spring-aop' }
-    compile ("org.apache.camel:camel-jms:${camelVersion}")  { excludes 'spring-tx', 'spring-jms','spring-context', 'spring-beans', 'spring-aop', 'spring-core' }
-    compile ("org.apache.camel:camel-cache:${camelVersion}") { excludes 'xercesImpl', 'xml-apis', 'slf4j-api', 'ehcache'  }
-    compile ("org.apache.camel:camel-tagsoup:${camelVersion}")
- 
+    compile ("org.apache.camel:camel-spring:${camelVersion}") { excludes 'log4j', 'spring-tx', 'spring-context', 'spring-aop' }
+
     compile ("org.quartz-scheduler:quartz:2.1.6") { excludes 'slf4j-api' }
 
     test ("org.apache.camel:camel-test:${camelVersion}") { excludes 'junit' }

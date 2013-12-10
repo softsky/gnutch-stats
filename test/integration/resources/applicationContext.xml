@@ -21,6 +21,6 @@
       <from uri="direct:c"/>
       <to uri="mock:direct:c"/>
     </route>
-
   </camelContext>
+
 </beans:beans>
