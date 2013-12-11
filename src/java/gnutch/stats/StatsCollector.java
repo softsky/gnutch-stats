@@ -15,17 +15,17 @@ public class StatsCollector {
 
     public void collect(Exchange ex) {
         String from = ex.getIn().getHeader("statsFrom").toString();
- 
+
         synchronized(statistic){
             if(statistic.containsKey(from) == false)
                 statistic.put(from, new AtomicLong());
-            
+
             statistic.get(from).incrementAndGet();
         }
 
         // TODO; complete implementation
         // so, basically what I need:
-        // a) arrayStatistic should be filled with values. 
+        // a) arrayStatistic should be filled with values.
         // Every new value is added to arrayStatistic if statisticTimeoutMsec timeout elapsed since pervious value been added to arrayStatistic
         // basically what this gives to us: #collect() method is called many times from different threads, it just increase values of statistic map
         // for particular statsFrom header. Every 15 seconds (statisticTimeoutMsec value)

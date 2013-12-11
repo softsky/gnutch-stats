@@ -1,24 +1,19 @@
-import grails.util.Environment
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
-import org.springframework.beans.factory.support.DefaultListableBeanFactory
-import org.apache.camel.builder.RouteBuilder
-import org.apache.camel.CamelContext
-
 import gnutch.stats.StatsCollector
+import grails.util.Environment
+
+import org.apache.camel.CamelContext
+import org.apache.camel.builder.RouteBuilder
+import org.springframework.beans.factory.support.DefaultListableBeanFactory
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 
 class GnutchStatsGrailsPlugin {
-    // the plugin version
     def version = "0.1.4"
-    // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
-    // resources that are excluded from plugin packaging
     def pluginExcludes = [
-        "grails-app/views/error.gsp"
     ]
 
     def loadAfter = ['controllers', 'services', 'routing', 'gnutch']
     def title = "Grails Gnutch Statistics plugin"
-
     def documentation = "http://grails.org/plugin/gnutch"
 
     def license = "APACHE"
@@ -28,15 +23,10 @@ class GnutchStatsGrailsPlugin {
 
     def issueManagement = [ system: "GitHub", url: "https://github.com/softsky/gnutch-stats/issues" ]
     def scm = [ url: "https://github.com/softsky/gnutch-stats" ]
-    def description = '''\
-Statistics for gnutch grails plugin
-'''
+    def description = 'Statistics for gnutch Grails plugin'
+
     def doWithSpring = {
       statsCollector(StatsCollector)
-    }
-
-    def doWithDynamicMethods = { ctx ->
-        // TODO Implement registering dynamic methods to classes (optional)
     }
 
     def doWithApplicationContext = { applicationContext ->
@@ -52,9 +42,8 @@ Statistics for gnutch grails plugin
       }
 
       if(applicationContext.containsBean(config?.camelContextId)){
-        final CamelContext camelContext = applicationContext.getBean(config.camelContextId);
+        final CamelContext camelContext = applicationContext.getBean(config.camelContextId)
 
-      
         def routeDefinitions = []
         camelContext.routeDefinitions.each { routeDefinition ->
           routeDefinitions << routeDefinition
@@ -77,9 +66,5 @@ Statistics for gnutch grails plugin
         applicationContext.getBean(config?.camelContextId).start()
       }
 
-    }
-
-    def onShutdown = { event ->
-        // TODO Implement code that is executed when the application shuts down (optional)
     }
 }
