@@ -11,7 +11,7 @@ import gnutch.stats.StatsCollector
 
 class GnutchStatsGrailsPlugin {
     // the plugin version
-    def version = "0.1.4"
+    def version = "0.1.7"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2 > *"
     // resources that are excluded from plugin packaging
@@ -35,6 +35,7 @@ class GnutchStatsGrailsPlugin {
 Statistics for gnutch grails plugin
 '''
     def doWithSpring = {
+
       stdSchedulerFactory(StdSchedulerFactory)
 
       quartzScheduler(Scheduler){ bean ->

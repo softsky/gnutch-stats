@@ -36,12 +36,8 @@ class StatsCollectorTests {
 
     statsCollector = new StatsCollector(statisticTimeoutMsec: 1000); // seeting delay as 1 second
 
-    statsCollector.statisticTimeoutMsec = 1000;
     // autowiring field
     statsCollector.quartzScheduler = new StdSchedulerFactory().getScheduler();
-
-    statsCollector.quartzScheduler.start();
-
 
     statsCollector.init(); // calling init method
   }

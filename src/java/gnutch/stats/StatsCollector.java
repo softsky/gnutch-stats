@@ -49,14 +49,17 @@ public class StatsCollector {
 
 	Trigger trigger = TriggerBuilder.newTrigger().
             withIdentity("collectTrigger", "statsCollectorGroup").
-            startNow().
             withSchedule(SimpleScheduleBuilder.simpleSchedule().
                          withIntervalInMilliseconds(statisticTimeoutMsec).
                          repeatForever()).
+            startNow().
             build();
 
 	// Schedule the job with the trigger
 	quartzScheduler.scheduleJob(job, trigger);
+
+        if(quartzScheduler.isStarted() == false)
+            quartzScheduler.start();
     }
 
     public void cleanUp() throws SchedulerException{

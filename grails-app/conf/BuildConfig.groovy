@@ -28,10 +28,10 @@ grails.project.dependency.resolution = {
 
     // runtime 'mysql:mysql-connector-java:5.1.21'
 
-    compile ("org.apache.camel:camel-core:${camelVersion}") { excludes 'slf4j-api' }   
-    compile ("org.apache.camel:camel-spring:${camelVersion}") { excludes 'log4j', 'spring-tx', 'spring-context', 'spring-aop' }
+    test ("org.apache.camel:camel-core:${camelVersion}") { excludes 'slf4j-api' }   
+    test ("org.apache.camel:camel-spring:${camelVersion}") { excludes 'log4j', 'spring-tx', 'spring-context', 'spring-aop' }
 
-    compile ("org.quartz-scheduler:quartz:2.1.6") { excludes 'slf4j-api' }
+    compile ("org.quartz-scheduler:quartz:2.2.0") { excludes 'slf4j-api' }
 
     test ("org.apache.camel:camel-test:${camelVersion}") { excludes 'junit' }
 
