@@ -18,8 +18,6 @@ grails.project.dependency.resolution = {
 
   dependencies {
 
-    def camelVersion = '2.12.1'
-
     test ("org.apache.camel:camel-core:${camelVersion}") { excludes 'slf4j-api' }   
     test ("org.apache.camel:camel-spring:${camelVersion}") { excludes 'log4j', 'spring-tx', 'spring-context', 'spring-aop' }
 
