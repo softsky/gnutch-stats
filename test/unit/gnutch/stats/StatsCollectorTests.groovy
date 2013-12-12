@@ -60,6 +60,8 @@ class StatsCollectorTests {
                    1000.times { statsCollector.collect(exchange); }
                    Thread.sleep(1000);
                               });
+	
+	Thread.sleep(1000); // waiting for 1 second so job is fired
 
     assert statsCollector.arrayStatistic.containsKey('loop') &&
     (statsCollector.arrayStatistic['loop'].get(0) + statsCollector.statistic['loop'].get()) == 1000L
