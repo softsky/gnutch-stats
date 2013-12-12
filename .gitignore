@@ -1,32 +1,4 @@
-
-
-
-
-
-
-
-
-
-
-
-# "temporary" build files
-# .gitignore for Grails 1.2 and 1.3
-# IDE support files
-# default HSQL database files for production mode
-# general HSQL database files
-# logs
-# older plugin install locations
-# other
-# plugin release file
-# project release file
-# web application files
 *.iws
-*Db.properties
-*Db.script
-/*.launch
-/*.tmproj
-/*.war
-/*.zip
 /*.zip
 /*.zip.sha1
 /.classpath
@@ -41,11 +13,7 @@
 /ivy*
 /logs
 /plugin.xml
-/plugins
-/prodDb.*
-/stacktrace.log
+*.log
 /target
 /test/reports
 /web-app/WEB-INF
-/web-app/WEB-INF/classes
-/web-app/plugins

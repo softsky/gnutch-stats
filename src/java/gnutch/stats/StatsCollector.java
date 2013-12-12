@@ -74,7 +74,7 @@ public class StatsCollector {
      */
     public void collect(Exchange ex) {
         String from = ex.getIn().getHeader("statsFrom").toString();
- 
+
         synchronized(statistic){
             if(statistic.containsKey(from) == false)
                 statistic.put(from, new AtomicLong(0L));
