@@ -40,16 +40,13 @@ class StatsCollectorControllerTests {
 
     void testIndex() {
 		exchange.in.headers['statsFrom'] = 'abc'
-    	statsCollector.collect(exchange);
-	
-    	Thread.sleep(1000); // waiting for 1 second so job is fired
-		
+    	statsCollector.collect(exchange);		
 		statsCollector.collect(exchange);
 		
 		Thread.sleep(1000); // waiting for 1 second so job is fired
 
 		controller.statsCollector = statsCollector
 		controller.index()
-		assert response.text == '[{"name":"abc","data":[1,0,1]}]';
+		assert response.text == '[{"name":"abc","data":[2,0]}]';
     }
 }
