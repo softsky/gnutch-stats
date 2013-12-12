@@ -11,17 +11,23 @@ class StatsCollectorController {
 	StatsCollector statsCollector
 	
     def index() { 		 
-
-		Map<String, List<Long>> arrayStatistic = statsCollector.getArrayStatistic()
-		 
+		
 		def json = []
-		 
-		int i = 0
-		for (entry in arrayStatistic) {
-			Map m = new HashMap()
-			m.put('name', entry.key)
-			m.put('data', entry.value)
-			json[i++] = m
+		
+		if(params.statsFrom) {
+
+			Map<String, List<Long>> arrayStatistic = statsCollector.getArrayStatistic()					 			
+			 
+			int i = 0
+			for (entry in arrayStatistic) {
+				
+				if(entry.key == params.statsFrom) {
+					Map m = new HashMap()
+					m.put('name', entry.key)
+					m.put('data', entry.value)
+					json[i++] = m
+				}
+			}
 		}
 		render json as JSON
     }
