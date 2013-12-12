@@ -40,12 +40,9 @@ class StatsCollectorControllerTests {
 
     void testIndex() {	
 		synchronized(statsCollector.statisticTimeoutMsec)  {
-			exchange.in.headers['statsFrom'] = 'abc'
-	    	statsCollector.collect(exchange);			
-			
-			Thread.sleep(1000); // waiting for 1 second so job is fired
-			
-			10.times { 
+						
+			10.times {
+				exchange.in.headers['statsFrom'] = 'abc'
 				statsCollector.collect(exchange);
 			
 				Thread.sleep(1000); // waiting for 1 second so job is fired
@@ -55,6 +52,6 @@ class StatsCollectorControllerTests {
 		controller.statsCollector = statsCollector
 		params.statsFrom = "abc"
 		controller.index()		
-		assert response.text == '[{"name":"abc","data":[1,0,1,1,1,1,1,1,1,1,1,1]}]';
+		assert response.text == '[{"name":"abc","data":[1,0,1,1,1,1,1,1,1,1,1]}]';
     }
 }
