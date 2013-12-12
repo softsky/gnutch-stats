@@ -38,15 +38,14 @@ class StatsCollectorControllerTests {
 		statsCollector.quartzScheduler.shutdown();
     }
 
-    void testIndex() {
+    synchronized void testIndex() {
 		exchange.in.headers['statsFrom'] = 'abc'
-    	statsCollector.collect(exchange);		
 		statsCollector.collect(exchange);
-
-		Thread.sleep(800); // waiting for 0.8 second (less than the statistic timeout) so job is fired
-
+		Thread.sleep(800)
+		15.times { statsCollector.collect(exchange); Thread.sleep(1000)}
+		
 		controller.statsCollector = statsCollector
 		controller.index()
-		assert response.text == '[{"name":"abc","data":[2]}]';
+		assert response.text == '[{"name":"abc","data":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}]';
     }
 }
