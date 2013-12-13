@@ -84,7 +84,6 @@ class StatsCollectorTests {
     
     Thread.sleep(1000); // waiting for 1 second so job is fired
 
-
     pool.shutdown();
     pool.awaitTermination(10, TimeUnit.SECONDS); // let it work 2 seconds
 
@@ -109,7 +108,6 @@ class StatsCollectorTests {
     }
     
     Thread.sleep(1000); // waiting for 1 second so job is fired
-
 
     pool.shutdown();
     pool.awaitTermination(10, TimeUnit.SECONDS); // let it work 2 seconds

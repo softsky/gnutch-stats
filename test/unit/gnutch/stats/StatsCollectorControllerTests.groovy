@@ -88,7 +88,6 @@ class StatsCollectorControllerTests {
     addTriggerListener(triggerListener)
 
     signal.await();
-    //Thread.sleep(15000)
 
     controller.statsCollector = statsCollector
     params.statsFrom = "abc"
