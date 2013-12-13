@@ -8,6 +8,17 @@ import org.apache.camel.impl.DefaultExchange
 import org.junit.*
 import org.quartz.impl.StdSchedulerFactory
 
+import java.util.concurrent.CountDownLatch
+
+import org.quartz.Trigger;
+import org.quartz.TriggerKey;
+import org.quartz.TriggerListener;
+
+import org.quartz.Matcher;
+
+import org.quartz.JobExecutionContext;
+
+
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
@@ -29,7 +40,6 @@ class StatsCollectorControllerTests {
 		// autowiring field
 		statsCollector.quartzScheduler = new StdSchedulerFactory().getScheduler();
 	
-	
 		statsCollector.init(); // calling init method
     }
 
@@ -38,20 +48,51 @@ class StatsCollectorControllerTests {
 		statsCollector.quartzScheduler.shutdown();
     }
 
-    void testIndex() {	
-		synchronized(statsCollector.statisticTimeoutMsec)  {
-						
-			10.times {
-				exchange.in.headers['statsFrom'] = 'abc'
-				statsCollector.collect(exchange);
-			
-				Thread.sleep(1000); // waiting for 1 second so job is fired
-			}
-		}
+  void testIndex() {	
+    CountDownLatch signal = new CountDownLatch(15);
 
-		controller.statsCollector = statsCollector
-		params.statsFrom = "abc"
-		controller.index()		
-		assert response.text == '[{"name":"abc","data":[1,0,1,1,1,1,1,1,1,1,1]}]';
+    def triggerListener = new TriggerListener(){
+
+      @Override
+      public String getName(){
+        return 'collectTrigger'
+      };
+
+      @Override
+      public void triggerFired(Trigger trigger, JobExecutionContext context){
+        signal.count.times {
+          exchange.in.headers['statsFrom'] = 'abc'
+          statsCollector.collect(exchange);
+        }
+        signal.countDown();
+      }
+
+      @Override
+      public boolean vetoJobExecution(Trigger trigger, JobExecutionContext context){
+      }
+
+      @Override
+      public void triggerMisfired(Trigger trigger){
+      }
+
+      @Override
+      public void triggerComplete(Trigger trigger, JobExecutionContext context,
+                                  Trigger.CompletedExecutionInstruction completeexecutioninstruction){
+      }
     }
+    
+    // this trigger listener will be called (in sync with default job from StatsCollector class)
+    statsCollector.
+    quartzScheduler.
+    listenerManager.
+    addTriggerListener(triggerListener)
+
+    signal.await();
+    //Thread.sleep(15000)
+
+    controller.statsCollector = statsCollector
+    params.statsFrom = "abc"
+    controller.index()
+    assert response.text == '[{"name":"abc","data":[15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]}]';
+  }
 }
