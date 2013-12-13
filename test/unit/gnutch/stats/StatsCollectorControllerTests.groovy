@@ -25,28 +25,28 @@ import org.quartz.JobExecutionContext;
 @TestMixin(GrailsUnitTestMixin)
 class StatsCollectorControllerTests {
 
-	def context;
-	def exchange;
+  def context;
+  def exchange;
 
-	def statsCollector;
+  def statsCollector;
 	
-    void setUp() {
-        // Setup logic here
-		context = new DefaultCamelContext();
-		exchange = new DefaultExchange(context);
+  void setUp() {
+    // Setup logic here
+    context = new DefaultCamelContext();
+    exchange = new DefaultExchange(context);
 	
-		statsCollector = new StatsCollector(statisticTimeoutMsec: 1000); // seeting delay as 1 second
+    statsCollector = new StatsCollector(statisticTimeoutMsec: 1000); // seeting delay as 1 second
 	
-		// autowiring field
-		statsCollector.quartzScheduler = new StdSchedulerFactory().getScheduler();
+    // autowiring field
+    statsCollector.quartzScheduler = new StdSchedulerFactory().getScheduler();
 	
-		statsCollector.init(); // calling init method
-    }
+    statsCollector.init(); // calling init method
+  }
 
-    void tearDown() {
-        // Tear down logic here
-		statsCollector.quartzScheduler.shutdown();
-    }
+  void tearDown() {
+    // Tear down logic here
+    statsCollector.quartzScheduler.shutdown();
+  }
 
   void testIndex() {	
     CountDownLatch signal = new CountDownLatch(15);
