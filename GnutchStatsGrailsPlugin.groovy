@@ -6,6 +6,9 @@ import org.apache.camel.builder.RouteBuilder
 import org.springframework.beans.factory.support.DefaultListableBeanFactory
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 
+import org.quartz.impl.StdSchedulerFactory
+import org.quartz.Scheduler
+
 class GnutchStatsGrailsPlugin {
     def version = "0.1.4"
     def grailsVersion = "2.0 > *"
