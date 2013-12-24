@@ -10,7 +10,7 @@ import org.quartz.impl.StdSchedulerFactory
 import org.quartz.Scheduler
 
 class GnutchStatsGrailsPlugin {
-    def version = "0.1.8"
+    def version = "0.1.9"
     def grailsVersion = "2.0 > *"
     def pluginExcludes = [
     ]
