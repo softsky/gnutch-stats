@@ -11,6 +11,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import java.util.concurrent.CountDownLatch
+
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
@@ -49,19 +51,26 @@ class StatsCollectorTests {
   }
 
   void testCollect() {
+    CountDownLatch signal = new CountDownLatch(1);
+
     exchange.in.headers['statsFrom'] = 'abc'
     statsCollector.collect(exchange)
     assert statsCollector.statistic['abc'].get() == 1L
     statsCollector.collect(exchange)
     assert statsCollector.statistic['abc'].get() == 2L
 
-    def thread = Thread.start({-> 
-                   exchange.in.headers['statsFrom'] = 'loop'
-                   1000.times { statsCollector.collect(exchange); }
-                   Thread.sleep(1000);
-                              });
+    def clos = { -> 
+      exchange.in.headers['statsFrom'] = 'loop'
+      1000.times { statsCollector.collect(exchange); }
+
+      Thread.sleep(2000);
+
+      signal.countDown()
+    }
+
+    def thread = Thread.start(clos);
 	
-	Thread.sleep(1000); // waiting for 1 second so job is fired
+    signal.await()
 
     assert statsCollector.arrayStatistic.containsKey('loop') &&
     (statsCollector.arrayStatistic['loop'].get(0) + statsCollector.statistic['loop'].get()) == 1000L

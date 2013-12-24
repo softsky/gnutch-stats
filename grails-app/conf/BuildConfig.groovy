@@ -21,7 +21,7 @@ grails.project.dependency.resolution = {
     test ("org.apache.camel:camel-core:${camelVersion}") { excludes 'slf4j-api' }   
     test ("org.apache.camel:camel-spring:${camelVersion}") { excludes 'log4j', 'spring-tx', 'spring-context', 'spring-aop' }
 
-    compile ("org.quartz-scheduler:quartz:2.2.0") { excludes 'slf4j-api' }
+    compile ("org.quartz-scheduler:quartz:2.2.1") { excludes 'slf4j-api' }
 
     test ("org.apache.camel:camel-test:${camelVersion}") { excludes 'junit' }
   }
