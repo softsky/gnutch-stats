@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicLongArray;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -15,8 +17,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public class StatsCollectorJob implements Job {
+    private static Logger LOG = LoggerFactory.getLogger(StatsCollectorJob.class);
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
+        LOG.trace("StatsCollectorJob executed");
         JobDataMap map = context.getJobDetail().getJobDataMap();
         
         Map<String, AtomicLong> statistic = (Map<String, AtomicLong>)map.get("statistic");
