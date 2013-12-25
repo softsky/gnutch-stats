@@ -14,6 +14,8 @@ import org.quartz.Trigger;
 import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 
+import grails.converters.JSON
+
 import org.quartz.Matcher;
 
 import org.quartz.JobExecutionContext;
@@ -30,6 +32,7 @@ class StatsCollectorControllerTests {
 
   def statsCollector;
 	
+  @Before
   void setUp() {
     // Setup logic here
     context = new DefaultCamelContext();
@@ -43,6 +46,7 @@ class StatsCollectorControllerTests {
     statsCollector.init(); // calling init method
   }
 
+  @After
   void tearDown() {
     // Tear down logic here
     statsCollector.quartzScheduler.shutdown();
@@ -94,4 +98,20 @@ class StatsCollectorControllerTests {
     controller.index()
     assert response.text == '[{"name":"abc","data":[15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]}]';
   }
+
+  void testList() {
+    controller.statsCollector = statsCollector
+    controller.list() 
+    def json = JSON.parse(response.text)
+    json.list.each { v ->
+      assert statsCollector.arrayStatistic[v] != null
+    }
+  }
+
+  void testTimeout() {
+    controller.statsCollector = statsCollector
+    controller.timeout() 
+    assert response.text == "{\"timeout\":${statsCollector.statisticTimeoutMsec}}"
+  }
+
 }

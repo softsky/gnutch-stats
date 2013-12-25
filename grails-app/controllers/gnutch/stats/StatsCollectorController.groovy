@@ -45,4 +45,10 @@ class StatsCollectorController {
     }
     render json as JSON
   }
+
+  def timeout(){
+    def json = [timeout: statsCollector.statisticTimeoutMsec]
+    render json as JSON
+  }
+
 }
