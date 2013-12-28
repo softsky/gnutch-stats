@@ -1,4 +1,9 @@
 $(function() {	
+    var timeout;
+    $.getJSON("http://localhost:8080/sourcingtool/statsCollector/timeout", function(data){
+        timeout = data.timeout;
+    })
+
     
     $('#container1').highcharts({
         chart: {events : {
@@ -40,134 +45,110 @@ $(function() {
             ]
         }]
     });
-    
-    $('#container2').highcharts({
-        chart: {
-	    events : {
-		load : function() {
-		    var series0 = this.series[0];
-		    var series1 = this.series[1];
-		    var series2 = this.series[2];
-		    var series3 = this.series[3];
-		    setInterval(function() {
-			series0.setData([Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]);
-			series1.setData([Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]);
-			series2.setData([Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]);
-			series3.setData([Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]);
-		    }, 5000);
+
+    $.getJSON("http://localhost:8080/sourcingtool/statsCollector?statsFrom=direct:process-tidy&callback=?", function(data){
+
+	// Create the chart
+	$('#container2').highcharts('StockChart', {
+	    chart : {
+		events : {
+		    load : function() {
+			// set up the updating of the chart each second
+			var series = this.series[0];
+			setInterval(function() {
+                            $.getJSON("http://localhost:8080/sourcingtool/statsCollector?statsFrom=direct:process-tidy&callback=?", function(data){
+                                series.setData(data);
+                            })
+                            
+			}, timeout);
+		    }
 		}
 	    },
-            type: 'column'
-        },
-        title: {
-            text: 'BarChart'
-        },
-        xAxis: {
-            categories: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec'
-            ]
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Rainfall (mm)'
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-            }
-        },
-        series: 
-	[{
-            name: 'Tokyo',
-            data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-            
-        }, {
-            name: 'New York',
-            data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-            
-        }, {
-            name: 'London',
-            data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-            
-        }, {
-            name: 'Berlin',
-            data: [Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100), Math.round(Math.random() * 100)]
-            
-        }]
-    });
+	    
+	    rangeSelector: {
+		buttons: [{
+		    count: 1,
+		    type: 'minute',
+		    text: '1M'
+		}, {
+		    count: 5,
+		    type: 'minute',
+		    text: '5M'
+		}, {
+		    type: 'all',
+		    text: 'All'
+		}],
+		inputEnabled: false,
+		selected: 0
+	    },
+	    
+	    title : {
+		text : 'direct:process-tidy'
+	    },
+	    
+	    exporting: {
+		enabled: false
+	    },
+	    
+	    series : [{
+		name : 'data',
+		data : data
+	    }]
+	});
+    })
+
+    
     $.getJSON("http://localhost:8080/sourcingtool/statsCollector?statsFrom=direct:process-tika&callback=?", function(data){
-        
-        // Create the chart
-        $('#container3').highcharts('StockChart', {
+
+	// Create the chart
+	$('#container3').highcharts('StockChart', {
 	    chart : {
-	        events : {
+		events : {
 		    load : function() {
-		        // set up the updating of the chart each second
-		        var series = this.series[0];
-		        setInterval(function() {
+			// set up the updating of the chart each second
+			var series = this.series[0];
+			setInterval(function() {
                             $.getJSON("http://localhost:8080/sourcingtool/statsCollector?statsFrom=direct:process-tika&callback=?", function(data){
                                 series.setData(data);
                             })
                             
-		        }, 15000);
+			}, timeout);
 		    }
-	        }
+		}
 	    },
 	    
 	    rangeSelector: {
-	        buttons: [{
+		buttons: [{
 		    count: 1,
 		    type: 'minute',
 		    text: '1M'
-	        }, {
+		}, {
 		    count: 5,
 		    type: 'minute',
 		    text: '5M'
-	        }, {
+		}, {
 		    type: 'all',
 		    text: 'All'
-	        }],
-	        inputEnabled: false,
-	        selected: 0
+		}],
+		inputEnabled: false,
+		selected: 0
 	    },
 	    
 	    title : {
-	        text : 'direct:process-tika'
+		text : 'direct:process-tika'
 	    },
 	    
 	    exporting: {
-	        enabled: false
+		enabled: false
 	    },
 	    
 	    series : [{
-	        name : 'data',
-	        data : data
+		name : 'data',
+		data : data
 	    }]
-        });
-    });
-    
+	});
+    })
+
     Highcharts.setOptions({
 	global : {
 	    useUTC : false
@@ -188,7 +169,7 @@ $(function() {
                                 series.setData(data);
                             })
                             
-			}, 15000);
+			}, timeout);
 		    }
 		}
 	    },
