@@ -13,25 +13,14 @@ class StatsCollectorController {
     def json = []
 		
     if(params.statsFrom) {
-
-      Map<String, List<Long>> arrayStatistic = statsCollector.getArrayStatistic()
-
-      int i = 0
-      for (entry in arrayStatistic) {
-
-        if(entry.key == params.statsFrom) {
-          Map m = new HashMap()
-          m.put('name', entry.key)
-          m.put('data', entry.value)
-          json[i++] = m
-        }
-      }
+      def arrayStatistic = statsCollector.getArrayStatistic()
+      json = arrayStatistic[params.statsFrom]
     }
 
     if(params.callback)
-      render "${params.callback}(${json as JSON})"
+      render(contentType: 'application/json', text: "${params.callback}(${json as JSON})")
       else
-      render json as JSON
+      render(contentType: 'application/json', text: json as JSON)
   }
 
   def list(){
@@ -43,12 +32,13 @@ class StatsCollectorController {
     arrayStatistic.each { k, v ->
       json["list"] << k
     }
-    render json as JSON
+
+    render(contentType: 'application/json', text: json as JSON)
   }
 
   def timeout(){
     def json = [timeout: statsCollector.statisticTimeoutMsec]
-    render json as JSON
+    render(contentType: 'application/json', text: json as JSON)
   }
 
 }
