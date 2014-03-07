@@ -72,8 +72,11 @@ class StatsCollectorTests {
 	
     signal.await()
 
-    assert statsCollector.arrayStatistic.containsKey('loop') &&
-    (statsCollector.arrayStatistic['loop'].get(0) + statsCollector.statistic['loop'].get()) == 1000L
+    assert statsCollector.arrayStatistic.containsKey('loop')
+    def arr = statsCollector.arrayStatistic['loop'].get(0)
+    def val = statsCollector.statistic['loop'].get()
+
+    assert arr[1] + val == 1000L:'The sum should be exactly 1000'
 
   }
 
@@ -97,8 +100,11 @@ class StatsCollectorTests {
     pool.awaitTermination(10, TimeUnit.SECONDS); // let it work 2 seconds
 
     nThreads.times {
-      assert statsCollector.arrayStatistic.containsKey('loop' + it) && 
-      (statsCollector.arrayStatistic['loop' + it].get(0) + statsCollector.statistic['loop' + it].get()) == 1000L;
+      assert statsCollector.arrayStatistic.containsKey('loop' + it)
+      def arr = statsCollector.arrayStatistic['loop' + it].get(0)
+      def val = statsCollector.statistic['loop' + it].get()
+
+      assert arr[1] + val == 1000L: 'The sum should be exactly 1000L'
     }
  
   }
@@ -121,8 +127,11 @@ class StatsCollectorTests {
     pool.shutdown();
     pool.awaitTermination(10, TimeUnit.SECONDS); // let it work 2 seconds
 
-    assert statsCollector.arrayStatistic.containsKey('loop') && 
-    (statsCollector.arrayStatistic['loop'].get(0) + statsCollector.statistic['loop'].get()) == 50 * 1000L;
+    assert statsCollector.arrayStatistic.containsKey('loop')
+    def arr =  statsCollector.arrayStatistic['loop'].get(0)
+    def val = statsCollector.statistic['loop'].get()
+  
+    assert arr[1] + val == 50 * 1000L: 'The sum should be exactly 50*1000L'
  
   }
 
