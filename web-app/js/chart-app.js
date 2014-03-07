@@ -67,13 +67,13 @@ $(function() {
 	    
 	    rangeSelector: {
 		buttons: [{
-		    count: 1,
+		    count: 15,
 		    type: 'minute',
-		    text: '1M'
+		    text: '15M'
 		}, {
-		    count: 5,
-		    type: 'minute',
-		    text: '5M'
+		    count: 1,
+		    type: 'hour',
+		    text: '1H'
 		}, {
 		    type: 'all',
 		    text: 'All'
@@ -119,13 +119,13 @@ $(function() {
 	    
 	    rangeSelector: {
 		buttons: [{
-		    count: 1,
+		    count: 15,
 		    type: 'minute',
-		    text: '1M'
+		    text: '15M'
 		}, {
-		    count: 5,
-		    type: 'minute',
-		    text: '5M'
+		    count: 1,
+		    type: 'hour',
+		    text: '1H'
 		}, {
 		    type: 'all',
 		    text: 'All'
@@ -176,13 +176,13 @@ $(function() {
 	    
 	    rangeSelector: {
 		buttons: [{
-		    count: 1,
+		    count: 15,
 		    type: 'minute',
-		    text: '1M'
+		    text: '15M'
 		}, {
-		    count: 5,
-		    type: 'minute',
-		    text: '5M'
+		    count: 1,
+		    type: 'hour',
+		    text: '1H'
 		}, {
 		    type: 'all',
 		    text: 'All'
