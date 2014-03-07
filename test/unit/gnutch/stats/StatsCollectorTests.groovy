@@ -63,7 +63,7 @@ class StatsCollectorTests {
       exchange.in.headers['statsFrom'] = 'loop'
       1000.times { statsCollector.collect(exchange); }
 
-      Thread.sleep(2000);
+      Thread.sleep(5000); // waiting for 5 seconds to complete
 
       signal.countDown()
     }
@@ -81,7 +81,7 @@ class StatsCollectorTests {
   }
 
   void testThreadSafetyDifferentHeaders() {
-    def nThreads = 50;
+    def nThreads = 10;
 
     ExecutorService pool = Executors.newFixedThreadPool(nThreads)
     nThreads.times {
@@ -94,7 +94,7 @@ class StatsCollectorTests {
       pool.execute(r);
     }
     
-    Thread.sleep(1000); // waiting for 1 second so job is fired
+    Thread.sleep(2000); // waiting for 5 second so job is fired
 
     pool.shutdown();
     pool.awaitTermination(10, TimeUnit.SECONDS); // let it work 2 seconds
@@ -110,7 +110,7 @@ class StatsCollectorTests {
   }
 
   void testThreadSafetySameHeader() {
-    def nThreads = 50;
+    def nThreads = 10;
 
     ExecutorService pool = Executors.newFixedThreadPool(nThreads)
     exchange.in.headers['statsFrom'] = 'loop';
@@ -131,7 +131,7 @@ class StatsCollectorTests {
     def arr =  statsCollector.arrayStatistic['loop'].get(0)
     def val = statsCollector.statistic['loop'].get()
   
-    assert arr[1] + val == 50 * 1000L: 'The sum should be exactly 50*1000L'
+    assert arr[1] + val == 10 * 1000L: 'The sum should be exactly 10*1000L'
  
   }
 
