@@ -15,6 +15,7 @@ import org.quartz.TriggerKey;
 import org.quartz.TriggerListener;
 
 import grails.converters.JSON
+import groovy.json.JsonSlurper
 
 import org.quartz.Matcher;
 
@@ -87,16 +88,28 @@ class StatsCollectorControllerTests {
     
     // this trigger listener will be called (in sync with default job from StatsCollector class)
     statsCollector.
-    quartzScheduler.
-    listenerManager.
-    addTriggerListener(triggerListener)
+      quartzScheduler.
+      listenerManager.
+      addTriggerListener(triggerListener)
 
     signal.await();
 
     controller.statsCollector = statsCollector
     params.statsFrom = "abc"
     controller.index()
-    assert response.text == '[{"name":"abc","data":[15,14,13,12,11,10,9,8,7,6,5,4,3,2,1]}]';
+
+    def slurper = new JsonSlurper()
+    def json = slurper.parseText(response.text)
+
+
+    Map<Integer, Object> stack = new HashMap<Integer, Object>();
+    15.times {
+      stack.put(it + 1, null);
+    }
+    json.each{ arr ->
+      stack.remove(arr[1])
+    }
+    assert stack.size() == 0; // asserting that removed all elements
   }
 
   void testList() {
