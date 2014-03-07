@@ -51,12 +51,12 @@ class GnutchStatsGrailsPlugin {
       def config = application.config.gnutch.stats
 
       if(Environment.current == Environment.TEST){
-        def xmlBeans = new DefaultListableBeanFactory()
-        new XmlBeanDefinitionReader(xmlBeans).loadBeanDefinitions('classpath:resources/applicationContext.xml')
-        xmlBeans.beanDefinitionNames.each { name ->
-          println "Registering bean: ${name}"
-          applicationContext.registerBeanDefinition(name, xmlBeans.getBeanDefinition(name))
-        }
+        def xmlBeans = applicationContext.getBeanFactory()
+        new XmlBeanDefinitionReader(xmlBeans).loadBeanDefinitions('test/integration/resources/applicationContext.xml')
+
+        // TODO remove this snippets
+        def camelContext = applicationContext.getBean(config?.camelContextId)
+        println "Routes: " + camelContext.routeDefinitions
       }
 
       if(applicationContext.containsBean(config?.camelContextId)){

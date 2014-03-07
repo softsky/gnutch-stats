@@ -9,12 +9,12 @@
   <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring">
     <route>
       <from uri="direct:a"/>
-      <to uri="mock:direct:a"/>
+      <to uri="direct:b"/>
     </route>
 
     <route>
       <from uri="direct:b"/>
-      <to uri="mock:direct:b"/>
+      <to uri="direct:c"/>
     </route>
 
     <route>

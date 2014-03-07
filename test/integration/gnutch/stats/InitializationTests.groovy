@@ -16,13 +16,24 @@ class InitializationTests extends CamelTestSupport {
     return camelContext
   }
 
+  @Before
+  public void setUp(){
+    super.setUp()
+  }
+
+  @After
+  public void tearDown(){
+    super.tearDown()
+  }
+
   @Test
   void testStatistic() {
     final unchanged = [1,2,3]
+    println camelContext.routeDefinitions
 
     assert statsCollector.statistic.size() == 0
 
-    def mockEndpoint = getMockEndpoint('mock:direct:a')
+    def mockEndpoint = getMockEndpoint('mock:direct:c')
 
     def expectation = {
       def ex = receivedExchanges[0]
@@ -34,11 +45,12 @@ class InitializationTests extends CamelTestSupport {
     mockEndpoint.expectedMessageCount(3)
 
     template.sendBody('direct:a', unchanged)
-    template.sendBody('direct:a', unchanged)
-    template.sendBody('direct:a', unchanged)
 
     assertMockEndpointsSatisfied()
 
     assert statsCollector.statistic['direct:a'].get() == 3
+    assert statsCollector.statistic['direct:b'].get() == 3
+    assert statsCollector.statistic['direct:c'].get() == 3
+
   }
 }
