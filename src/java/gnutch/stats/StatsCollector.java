@@ -34,7 +34,7 @@ public class StatsCollector {
     private static Logger LOG = LoggerFactory.getLogger(StatsCollector.class);
 
     private Map<String, AtomicLong> statistic = new HashMap<String, AtomicLong>();
-    private Map<String, List<Long>> arrayStatistic = new HashMap<String, List<Long>>();
+    private Map<String, List<List<Long>>> arrayStatistic = new HashMap<String, List<List<Long>>>();
 
     protected Scheduler quartzScheduler;
     protected Integer statisticTimeoutMsec = 15000; // 15 seconds for statistic gathering
@@ -97,7 +97,7 @@ public class StatsCollector {
      *
      * @return value of `arrayStatistic` field
      */
-    public Map<String, List<Long>> getArrayStatistic(){
+    public Map<String, List<List<Long>>> getArrayStatistic(){
         return arrayStatistic;
     }
 
