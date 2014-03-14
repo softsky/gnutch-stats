@@ -9,6 +9,8 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 import org.quartz.impl.StdSchedulerFactory
 import org.quartz.Scheduler
 
+import org.apache.camel.spring.Main
+
 class GnutchStatsGrailsPlugin {
     def version = "0.1.17"
     def grailsVersion = "2.2 > *"
@@ -51,12 +53,30 @@ class GnutchStatsGrailsPlugin {
       def config = application.config.gnutch.stats
 
       if(Environment.current == Environment.TEST){
-        def xmlBeans = applicationContext.getBeanFactory()
-        new XmlBeanDefinitionReader(xmlBeans).loadBeanDefinitions('test/integration/resources/applicationContext.xml')
+        // new XmlBeanDefinitionReader(applicationContext.beanFactory).loadBeanDefinitions('test/integration/resources/applicationContext.xml')
+
+        final Main main = new Main();
+        main.setApplicationContextUri("test/integration/resources/applicationContext.xml");
+        main.start();
+
+        def ctx = main.applicationContext
+
+        ctx.beanDefinitionNames.each { name ->
+          def beanDef = ctx.beanFactory.getBeanDefinition(name);
+          applicationContext.registerBeanDefinition(name, beanDef)
+
+          if(name == 'camelContext'){
+            def cctx = ctx.getBean(name);
+            cctx.routeDefinitions.each { routeDef ->
+              applicationContext.getBean('camelContext').addRouteDefinition(routeDef)
+            }
+          }
+        }
 
         // TODO remove this snippets
-        def camelContext = applicationContext.getBean(config?.camelContextId)
-        println "Routes: " + camelContext.routeDefinitions
+        def camelContext = applicationContext.getBean("camelContext")
+        println "Route definitions: " + camelContext.routeDefinitions
+        println "Routes: " + camelContext.routes
       }
 
       if(applicationContext.containsBean(config?.camelContextId)){

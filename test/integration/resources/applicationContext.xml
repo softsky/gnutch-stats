@@ -1,26 +1,24 @@
-<beans:beans xmlns="http://www.springframework.org/schema/integration"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xmlns:beans="http://www.springframework.org/schema/beans"
-             xsi:schemaLocation="
-                                 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                                 http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
-                                 http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd"> 
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+                           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
   <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring">
-    <route>
+    <route id="a">
       <from uri="direct:a"/>
       <to uri="direct:b"/>
     </route>
 
-    <route>
+    <route id="b">
       <from uri="direct:b"/>
       <to uri="direct:c"/>
     </route>
 
-    <route>
+    <route id="c">
       <from uri="direct:c"/>
       <to uri="mock:direct:c"/>
     </route>
   </camelContext>
 
-</beans:beans>
+</beans>

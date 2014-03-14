@@ -19,10 +19,12 @@ class InitializationTests extends CamelTestSupport {
   @Before
   public void setUp(){
     super.setUp()
+    camelContext.start()
   }
 
   @After
   public void tearDown(){
+    camelContext.stop()
     super.tearDown()
   }
 
@@ -42,15 +44,15 @@ class InitializationTests extends CamelTestSupport {
     expectation.delegate = mockEndpoint
 
     mockEndpoint.expects(expectation)
-    mockEndpoint.expectedMessageCount(3)
+    mockEndpoint.expectedMessageCount(1)
 
     template.sendBody('direct:a', unchanged)
 
     assertMockEndpointsSatisfied()
 
-    assert statsCollector.statistic['direct:a'].get() == 3
-    assert statsCollector.statistic['direct:b'].get() == 3
-    assert statsCollector.statistic['direct:c'].get() == 3
+    assert statsCollector.statistic['direct:a'].get() == 1
+    assert statsCollector.statistic['direct:b'].get() == 1
+    assert statsCollector.statistic['direct:c'].get() == 1
 
   }
 }
